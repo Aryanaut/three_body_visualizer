@@ -1,0 +1,30 @@
+{
+  "name": "three_body_visualizer",
+  "version": "1.0.0",
+  "description": "A visualizer for the three body problem in classical mechanics.",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config ./src/client/webpack.prod.js",
+    "start": "node ./dist/server/server.js",
+    "dev": "webpack serve --config ./src/client/webpack.dev.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "gh-pages -d ./dist/client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aryanaut/three_body_visualizer.git"
+  },
+  "keywords": [
+    "3bp"
+  ],
+  "author": "Aryanaut",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aryanaut/three_body_visualizer/issues"
+  },
+  "homepage": "https://github.com/Aryanaut/three_body_visualizer#readme",
+  "publishConfig": {
+    "@Aryanaut:registry": "https://npm.pkg.github.com"
+  }
+
+}
