@@ -1,5 +1,5 @@
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { GUI } from 'dat.gui';
+import * as dat from './dat.gui';
 import * as THREE from 'three';
 import { useEffect, useRef } from 'react';
 
@@ -193,7 +193,7 @@ const engine = new Engine(bodies, scene);
 
 // GUI 
 
-const gui = new GUI();
+const gui = new dat.GUI();
 var env = gui.addFolder('engine');
 env.open();
 env.add(engine, 'INTERVAL', 0, 0.001, 0.0001).name("Interval")
