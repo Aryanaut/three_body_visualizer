@@ -23,6 +23,8 @@
   "homepage": "https://github.com/Aryanaut/three_body_visualizer#readme",
   "publishConfig": {
     "@Aryanaut:registry": "https://npm.pkg.github.com"
+  },
+  "dependencies": {
+    "gh-pages": "^6.1.1"
   }
-
 }
