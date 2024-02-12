@@ -4,11 +4,9 @@
   "description": "A visualizer for the three body problem in classical mechanics.",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --config ./src/client/webpack.prod.js",
-    "start": "node ./dist/server/server.js",
-    "dev": "webpack serve --config ./src/client/webpack.dev.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "gh-pages -d ./dist/client"
+    "test": "exit 0",
+    "build": "vite build",
+    "deploy": "gh-pages -d ./dist"
   },
   "repository": {
     "type": "git",
