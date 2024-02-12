@@ -1,7 +1,6 @@
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three-orbitcontrols@2.110.3/OrbitControls.min.js';
 import * as dat from './dat.gui';
-import * as THREE from 'three';
-import { useEffect, useRef } from 'react';
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.112.1/build/three.module.js';
 
 const scene = new THREE.Scene();
 var INTERVAL = 0.0001;
