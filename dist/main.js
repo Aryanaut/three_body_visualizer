@@ -1,5 +1,5 @@
 import { OrbitControls } from 'https://cdn.skypack.dev/three@0.132.2/examples/jsm/controls/OrbitControls.js';
-import * as dat from './dat.gui';
+import * as dat from './dat.gui.min.js';
 import * as THREE from 'https://cdn.skypack.dev/pin/three@v0.132.2-dLPTyDAYt6rc6aB18fLm/mode=imports/optimized/three.js';
 
 const scene = new THREE.Scene();
