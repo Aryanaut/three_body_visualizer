@@ -1,6 +1,6 @@
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three-orbitcontrols@2.110.3/OrbitControls.min.js';
+import { OrbitControls } from 'https://cdn.skypack.dev/three@0.132.2/examples/jsm/controls/OrbitControls.js';
 import * as dat from './dat.gui';
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.112.1/build/three.module.js';
+import * as THREE from 'https://cdn.skypack.dev/pin/three@v0.132.2-dLPTyDAYt6rc6aB18fLm/mode=imports/optimized/three.js';
 
 const scene = new THREE.Scene();
 var INTERVAL = 0.0001;
