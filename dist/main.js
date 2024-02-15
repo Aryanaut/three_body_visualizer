@@ -105,33 +105,26 @@ class Engine {
 
 		const size = 500;
 		const divisions = 50;
-		this.SHOWGRID = false;
 		this.gridHelper = new THREE.GridHelper( size, divisions );
 		scene.add( this.gridHelper );
+		this.gridHelper.visible = false;
 		// console.log(bodies);
 
 		this.reset_engine = function() {
+
 			for (let i = 0; i < this.bodies.length; i++) {
-				var s = bodies[i];
-				scene.remove(s);
-			}
-
-			this.bodies = [];
-
-			for (let i = 0; i < 3; i++) {
-				this.bodies.push( 
-					new Star(gen_random_vector3(-100, 100), gen_random_vector3(-0.1, 0.1), 3, 6e29, scene)
-				);
+				var s = this.bodies[i];
+				s.pos = gen_random_vector3(-100, 100);
+				s.vel = gen_random_vector3(-0.1, 0.1);
+				s.acceleration.multiplyScalar(0);
 			}
 		}
-	}
 
-	toggle_grid() {
-		if ( this.SHOWGRID ) 
-			this.scene.remove( this.gridHelper );
-		else
-			this.scene.add( this.gridHelper );
-		this.SHOWGRID = !this.SHOWGRID;
+		this.toggle_grid = function() {
+			
+			this.gridHelper.visible = !this.gridHelper.visible;
+			console.log('toggle', this.gridHelper.visible)
+		}
 	}
 
 	calculate_collisions(s1, s2) {
@@ -166,7 +159,6 @@ class Engine {
 					rel_pos_vector = rel_pos_vector.normalize();
 					var strength = -1 * (this.CONST_G * p.m * s.m) / (d * d);
 					var force = rel_pos_vector.multiplyScalar(strength);
-					force = force.multiplyScalar(this.INTERVAL);
 
 					if (this.collision) {
 						force.multiplyScalar(0);
@@ -227,14 +219,10 @@ const gui = new dat.GUI();
 var env = gui.addFolder('engine');
 env.open();
 env.add(engine, 'INTERVAL', 0, 0.001, 0.0001).name("Interval")
-grid_checkbox = env.add(engine, 'SHOWGRID').name('Show Grid').listen();
-grid_checkbox.onChange(engine.toggle_grid());
+var grid_checkbox = env.add(engine, 'toggle_grid').name('Show Grid')
 
 env.add(engine, 'reset_engine').name("Randomize Positions");
 
-// GridHelper 
-
-console.log(scene.children);
 
 function animate() {
 
@@ -257,5 +245,6 @@ function animate() {
 	controls.update();
 	renderer.render( scene, camera );
 
+	console.log(scene.children[0].children);
 }	
 animate()
