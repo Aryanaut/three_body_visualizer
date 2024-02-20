@@ -103,6 +103,9 @@ class Engine {
 
 		this.scene = scene;
 
+		this.freeze = false;
+		this.frozen_positions = [];
+
 		const size = 500;
 		const divisions = 50;
 		this.gridHelper = new THREE.GridHelper( size, divisions );
@@ -111,6 +114,8 @@ class Engine {
 		// console.log(bodies);
 
 		this.reset_engine = function() {
+
+			this.freeze = false;
 
 			for (let i = 0; i < this.bodies.length; i++) {
 				var s = this.bodies[i];
@@ -124,6 +129,13 @@ class Engine {
 			
 			this.gridHelper.visible = !this.gridHelper.visible;
 			console.log('toggle', this.gridHelper.visible)
+		}
+
+		this.freeze_sim = function() {
+			this.freeze = !this.freeze;
+			for ( let i = 0; i < this.bodies.length; i++ ) {
+				this.frozen_positions.push(this.bodies[i].pos);
+			}
 		}
 	}
 
@@ -221,6 +233,7 @@ env.open();
 env.add(engine, 'INTERVAL', 0, 0.001, 0.0001).name("Interval")
 var grid_checkbox = env.add(engine, 'toggle_grid').name('Show Grid')
 
+env.add(engine, 'freeze_sim').name("Freeze Simulation")
 env.add(engine, 'reset_engine').name("Randomize Positions");
 
 
@@ -229,16 +242,24 @@ function animate() {
 	requestAnimationFrame( animate );
 	var force_list = engine.calculate_force_vectors();
 
-	for (let i = 0; i < bodies.length; i++) {
-		var s = bodies[i];
-		var f = force_list[i];
-		f.divideScalar(s.m);
-		s.acceleration.add(f);
-		s.acceleration.multiplyScalar(engine.INTERVAL) 
-		s.INTERVAL = INTERVAL;
-		console.log(i, f, engine.collision)
-		// console.log(s.f)
-		s.movement();
+	if ( !engine.freeze ) {
+		for (let i = 0; i < bodies.length; i++) {
+			var s = bodies[i];
+			var f = force_list[i];
+			f.divideScalar(s.m);
+			s.acceleration.add(f);
+			s.acceleration.multiplyScalar(engine.INTERVAL) 
+			s.INTERVAL = INTERVAL;
+			console.log(i, f, engine.collision)
+			// console.log(s.f)
+			s.movement();
+		}
+	} else {
+		
+		for (let i = 0; i < bodies.length; i++) {
+			var s = bodies[i];
+			s.pos = engine.frozen_positions[i];
+		}
 	}
 
 	// required if controls.enableDamping or controls.autoRotate are set to true
