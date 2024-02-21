@@ -237,17 +237,6 @@ for (let i = 0; i < 3; i++) {
 
 const engine = new Engine(bodies, scene);
 
-// GUI 
-
-const gui = new dat.GUI();
-var env = gui.addFolder('engine');
-env.open();
-env.add(engine, 'INTERVAL', 0, 0.001, 0.0001).name("Interval")
-var grid_checkbox = env.add(engine, 'toggle_grid').name('Show Grid')
-
-env.add(engine, 'freeze_sim').name("Freeze Simulation")
-env.add(engine, 'reset_engine').name("Randomize Positions");
-
 function getRandomStarField(numberOfStars, width, height) {
     var canvas = document.createElement('CANVAS');
 
@@ -283,6 +272,17 @@ var skyBoxMaterial = new THREE.MeshBasicMaterial({
 var sky = new THREE.Mesh(skyBox, skyBoxMaterial);
 scene.add(sky);
 
+// GUI 
+
+const gui = new dat.GUI();
+var env = gui.addFolder('engine');
+env.open();
+env.add(engine, 'INTERVAL', 0, 0.001, 0.0001).name("Interval")
+var grid_checkbox = env.add(engine.gridHelper, 'visible').name('Show Grid')
+var sky_checkbox = env.add(sky, 'visible').name('Show Starfield')
+
+env.add(engine, 'freeze_sim').name("Freeze Simulation")
+env.add(engine, 'reset_engine').name("Randomize Positions");
 
 function animate() {
 
