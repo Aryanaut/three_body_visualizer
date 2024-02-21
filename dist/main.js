@@ -116,6 +116,7 @@ class Engine {
 		this.reset_engine = function() {
 
 			this.freeze = false;
+			this.collision = false;
 
 			for (let i = 0; i < this.bodies.length; i++) {
 				var s = this.bodies[i];
@@ -174,6 +175,7 @@ class Engine {
 
 					if (this.collision) {
 						force.multiplyScalar(0);
+						this.reset_engine;
 						this.collision = false;
 					}
 
