@@ -85,7 +85,6 @@ class Star {
 class Engine {
 	constructor(body_list, scene) {
 
-		this.body_positions = [[]]
 		this.render_bodies = new THREE.Group();
 
 		for (let i = 0; i < body_list.length; i++) {
