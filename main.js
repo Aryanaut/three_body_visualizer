@@ -106,6 +106,8 @@ class Engine {
 		this.freeze = false;
 		this.frozen_positions = [];
 
+		this.out_of_bounds = false;
+
 		const size = 500;
 		const divisions = 50;
 		this.gridHelper = new THREE.GridHelper( size, divisions );
@@ -115,21 +117,21 @@ class Engine {
 
 		this.reset_engine = function() {
 
-			this.freeze = false;
-			this.collision = false;
-
 			for (let i = 0; i < this.bodies.length; i++) {
 				var s = this.bodies[i];
 				s.pos = gen_random_vector3(-100, 100);
 				s.vel = gen_random_vector3(-0.1, 0.1);
 				s.acceleration.multiplyScalar(0);
 			}
+
+			this.freeze = false;
+			this.collision = false;
+			this.out_of_bounds = false;
 		}
 
 		this.toggle_grid = function() {
 			
 			this.gridHelper.visible = !this.gridHelper.visible;
-			console.log('toggle', this.gridHelper.visible)
 		}
 
 		this.freeze_sim = function() {
@@ -144,6 +146,14 @@ class Engine {
 		var collision_distance = s1.r + s2.r;
 		if (s1.pos.distanceTo(s2.pos) <= collision_distance)
 			this.collision = true;
+	}
+
+	check_out_of_bounds() {
+		for (let i = 0; i < this.bodies.length; i++) {
+			var pos = this.bodies[i].pos;
+			if ( pos.distanceTo(new THREE.Vector3(0, 0, 0)) > 800 )
+				this.out_of_bounds = true;
+		}
 	}
 
 	calculate_force_vectors() {
@@ -164,6 +174,7 @@ class Engine {
 					let s_pos = new THREE.Vector3(s.pos.x, s.pos.y, s.pos.z);
 
 					this.calculate_collisions(p, s);
+					this.check_out_of_bounds();
 
 					var rel_pos_vector = new THREE.Vector3().subVectors(p_pos, s_pos);
 					var d = rel_pos_vector.length();
@@ -238,6 +249,41 @@ var grid_checkbox = env.add(engine, 'toggle_grid').name('Show Grid')
 env.add(engine, 'freeze_sim').name("Freeze Simulation")
 env.add(engine, 'reset_engine').name("Randomize Positions");
 
+function getRandomStarField(numberOfStars, width, height) {
+    var canvas = document.createElement('CANVAS');
+
+	canvas.width = width;
+	canvas.height = height;
+
+	var ctx = canvas.getContext('2d');
+
+	ctx.fillStyle="black";
+	ctx.fillRect(0, 0, width, height);
+
+	for (var i = 0; i < numberOfStars; ++i) {
+		var radius = Math.random() * 2;
+		var x = Math.floor(Math.random() * width);
+		var y = Math.floor(Math.random() * height);
+
+		ctx.beginPath();
+		ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+		ctx.fillStyle = 'white';
+		ctx.fill();
+	}
+
+	var texture = new THREE.Texture(canvas);
+	texture.needsUpdate = true;
+	return texture;
+};
+
+var skyBox = new THREE.SphereGeometry(800, 50, 50);
+var skyBoxMaterial = new THREE.MeshBasicMaterial({
+    map: getRandomStarField(600, 2048, 2048),
+	side: THREE.BackSide
+});
+var sky = new THREE.Mesh(skyBox, skyBoxMaterial);
+scene.add(sky);
+
 
 function animate() {
 
@@ -252,10 +298,13 @@ function animate() {
 			s.acceleration.add(f);
 			s.acceleration.multiplyScalar(engine.INTERVAL) 
 			s.INTERVAL = INTERVAL;
-			console.log(i, f, engine.collision)
-			// console.log(s.f)
+			// console.log(i, f, engine.collision)
 			s.movement();
 		}
+
+		if ( engine.out_of_bounds )
+			engine.reset_engine();
+
 	} else {
 		
 		for (let i = 0; i < bodies.length; i++) {
@@ -268,6 +317,5 @@ function animate() {
 	controls.update();
 	renderer.render( scene, camera );
 
-	console.log(scene.children[0].children);
 }	
 animate()
