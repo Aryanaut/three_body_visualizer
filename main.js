@@ -27,41 +27,6 @@ class Star {
 		this.sphere.position.set(this.pos.x, this.pos.y, this.pos.z);
 		scene.add(sphere);
 
-		// orbit trails
-		this.vertices = []; // path of movement
-		this.trail_length = 300;
-		this.trail_geo = new THREE.BufferGeometry()
-		this.trail_geo.setAttribute( 'position', new THREE.BufferAttribute( this.trail_length, 3 ) );
-		this.trail_geo.attributes.position.needsUpdate = true;
-		this.trail_geo.setDrawRange( 0, 2 );
-
-
-		this.line = new THREE.Line( geo, material );
-		// scene.add(this.line);
-
-		this.drawTrail = true;
-	}
-
-	draw_trails() {
-
-		if (!this.drawTrail) {
-			this.drawTrail = true;
-			scene.add(this.line);
-		}
-
-		else if (this.drawTrail) {
-			scene.remove(this.line);
-			var newLineGeo = new THREE.BufferGeometry();
-			newLineGeo.vertices = this.vertices.slice();
-			// newLineGeo.geometry.setAttribute('position', true);
-			
-			while (newLineGeo.length > this.trail_length) {
-				newLineGeo.vertices.shift();
-			}
-
-			this.line = new THREE.Line(newLineGeo, this.line.material);
-			scene.add(this.line);
-		}
 	}
 
 	updateMeshPositionTrail = function () {
@@ -114,6 +79,8 @@ class Engine {
 		this.gridHelper.visible = false;
 		// console.log(bodies);
 
+		this.trail = new THREE.BufferGeometry();
+
 		this.reset_engine = function() {
 
 			for (let i = 0; i < this.bodies.length; i++) {
@@ -126,11 +93,6 @@ class Engine {
 			this.freeze = false;
 			this.collision = false;
 			this.out_of_bounds = false;
-		}
-
-		this.toggle_grid = function() {
-			
-			this.gridHelper.visible = !this.gridHelper.visible;
 		}
 
 		this.freeze_sim = function() {
