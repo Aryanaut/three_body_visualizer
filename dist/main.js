@@ -40,10 +40,6 @@ class Star {
 		this.acceleration.multiplyScalar(0);
 
 		this.sphere.position.copy(this.pos);
-		this.vertices.push(this.pos.clone());
-
-		if (this.drawTrail) this.draw_trails();
-		
 	}
 }
 
