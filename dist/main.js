@@ -29,11 +29,6 @@ class Star {
 
 	}
 
-	updateMeshPositionTrail = function () {
-
-		this.vertices.push(this.sphere.position.clone());
-	}
-
 	movement() {
 		this.vel.add(this.acceleration);
 		this.pos.add(this.vel);
